@@ -16,7 +16,7 @@ public class SimpleMazeGenerator extends AMazeGenerator{
             }
             // breaks randomly walls
             int rndNum = rand.nextInt(col);
-            maze.addEmptyCell(row, rndNum);
+            maze.addEmptyCell(i, rndNum);
         }
         maze.addEmptyCell(row -1, col-1);
         return maze;

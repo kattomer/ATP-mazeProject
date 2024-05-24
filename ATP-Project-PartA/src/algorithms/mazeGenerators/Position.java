@@ -16,11 +16,11 @@ public class Position implements Serializable {
         this.col = col;
     }
 
-    public int getRow() {
+    public int getRowIndex() {
         return row;
     }
 
-    public int getColumn() {
+    public int getColumnIndex() {
         return col;
     }
 
@@ -35,5 +35,27 @@ public class Position implements Serializable {
     }
     public Position getLeftPosition(){
         return new Position(row, col -1);
+    }
+    public Position getRightUpPosition(){
+        return new Position(row -1, col +1);
+    }
+    public Position getRightDownPosition(){
+        return new Position(row +1, col +1);
+    }
+    public Position getLeftUpPosition(){
+        return new Position(row -1, col -1);
+    }
+    public Position getLeftDownPosition(){
+        return new Position(row +1, col -1);
+    }
+
+    @Override
+    public String toString() {
+        return "{" + this.row + "," + this.col + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (this.row == ((Position) obj).row && this.col == ((Position) obj).col);
     }
 }
