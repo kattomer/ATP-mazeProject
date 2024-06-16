@@ -8,8 +8,4 @@ public class MazeState extends AState {
         super(prevState,state,cost);
     }
 
-//    @Override
-//    public Object getState() {
-//        return this.State;
-//    }
 }

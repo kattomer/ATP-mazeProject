@@ -9,6 +9,10 @@ public class MyMazeGenerator extends AMazeGenerator{
     // generates maze using iterative DFS
     @Override
     public Maze generate(int rows, int columns) {
+        if(rows <= 2 && columns <= 2){
+            return null;
+        }
+
         Maze maze = new Maze(rows, columns);
         Stack<Position> neighbours = new Stack<>();
 
@@ -26,7 +30,6 @@ public class MyMazeGenerator extends AMazeGenerator{
         while (!neighbours.isEmpty()) {
             Position currPosition = neighbours.pop();
             ArrayList<Position> unvisitedNeighbours = maze.doubleSteps(currPosition);
-//            maze.print();
 
             if (unvisitedNeighbours.size() != 0) {
                 neighbours.push(currPosition);
@@ -42,7 +45,6 @@ public class MyMazeGenerator extends AMazeGenerator{
             }
         }
         // mark the goal position
-//        maze.addEmptyCell(rows-1, columns-1);
         maze.setGoalPosition();
         return maze;
     }

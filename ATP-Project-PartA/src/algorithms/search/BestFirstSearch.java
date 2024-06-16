@@ -2,25 +2,29 @@ package algorithms.search;
 
 import java.util.*;
 
-public class BestFirstSearch extends BreadthFirstSearch {
+public class BestFirstSearch extends ASearchingAlgorithm {
+    class  costComparator implements Comparator<AState>{
+        @Override
+        public int compare(AState s1, AState s2) {
+            return Double.compare(s1.getCost(), s2.getCost());
+        }
+    }
+    protected PriorityQueue<AState> openList;
 
+    public BestFirstSearch() {
+        super();
+        this.openList = new PriorityQueue<>(( new costComparator()));
+
+    }
     @Override
     public Solution solve(ISearchable item) {
-
-        class  costComparator implements Comparator<AState>{
-            @Override
-            public int compare(AState s1, AState s2) {
-                return Double.compare(s1.getCost(), s2.getCost());
-            }
+        if(item == null){
+            return null;
         }
-
-        PriorityQueue<AState> openList = new PriorityQueue<>(new costComparator());
-        Set<AState> closedSet = new HashSet<>();
+        HashMap<String,AState> closedSet = new HashMap<>();
 
         AState startState = item.getStartState();
         AState goalState = item.getGoalState();
-
-        startState.setCost(0);
         openList.add(startState);
 
         while (!openList.isEmpty()) {
@@ -30,15 +34,17 @@ public class BestFirstSearch extends BreadthFirstSearch {
             if (currentState.equals(goalState)) {
                 return new Solution(currentState);
             }
-            closedSet.add(currentState);
-
-            ArrayList<AState> neighbors = item.getAllPossibleStates(currentState);
-            for (AState neighbor : neighbors) {
-                if (!closedSet.contains(neighbor) && !openList.contains(neighbor)) {
-                    neighbor.setFrom(currentState);
-                    neighbor.setCost(currentState.getCost() + neighbor.getCost());
-                    openList.add(neighbor);
+            else{
+                ArrayList<AState> neighbors = item.getAllPossibleStates(currentState);
+                for (AState neighbor : neighbors) {
+                    if (!closedSet.containsKey(neighbor.toString()) && !openList.contains(neighbor)) {
+                        neighbor.setFrom(currentState);
+                        neighbor.setCost(currentState.getCost() + neighbor.getCost());
+                        closedSet.put(neighbor.toString(), neighbor);
+                        openList.add(neighbor);
+                    }
                 }
+                closedSet.put(currentState.toString(), currentState);
             }
         }
         // No solution found

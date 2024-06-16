@@ -19,7 +19,6 @@ public class Position implements Serializable {
     public int getRowIndex() {
         return row;
     }
-
     public int getColumnIndex() {
         return col;
     }

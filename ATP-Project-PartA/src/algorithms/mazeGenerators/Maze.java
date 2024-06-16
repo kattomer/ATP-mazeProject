@@ -54,6 +54,7 @@ public class Maze {
         return row >= 0 && row < this.getMazeRows() &&
                 col >= 0 && col < this.getMazeCols();
     }
+
     public ArrayList<Position> doubleSteps(Position position) {
         ArrayList<Position> wallsList = new ArrayList<>();
         if (position != null) {
@@ -74,7 +75,7 @@ public class Maze {
     }
 
     public void connectNeighbours(Position currentPosition, Position neighbour) throws IllegalArgumentException {
-        if (!this.isValidPosition(currentPosition)) {
+        if (!this.isValidPosition(currentPosition) || !this.isValidPosition(neighbour)) {
             throw new IllegalArgumentException();
         }
         if (currentPosition.getColumnIndex() == neighbour.getColumnIndex()) {

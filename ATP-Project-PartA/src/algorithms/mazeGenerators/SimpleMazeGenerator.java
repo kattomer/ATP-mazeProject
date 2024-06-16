@@ -7,6 +7,9 @@ public class SimpleMazeGenerator extends AMazeGenerator{
 
     @Override
     public Maze generate(int row, int col) {
+        if(row == 0 && col == 0){
+            return null;
+        }
         EmptyMazeGenerator emptyMaze = new EmptyMazeGenerator();
         Maze maze = emptyMaze.generate(row, col);
 
