@@ -14,6 +14,22 @@ public class Maze {
         this.start = new Position(0, 0); // Default start position
         this.goal = new Position(row - 1, col - 1); // Default goal position
     }
+    
+    public Maze(byte[] byteArray) {
+        int rows = byteArray[0] & 0xFF; // Convert to unsigned int
+        int cols = byteArray[1] & 0xFF; // Convert to unsigned int
+        maze = new int[rows][cols];
+
+        int index = 2;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                maze[i][j] = byteArray[index++] & 0xFF; // Convert to unsigned int
+            }
+        }
+
+        this.start = new Position(byteArray[index++] & 0xFF, byteArray[index++] & 0xFF);
+        this.goal = new Position(byteArray[index++] & 0xFF, byteArray[index] & 0xFF);
+    }
 
     // Get the number of columns in the maze
     private int getMazeCols() {
@@ -155,4 +171,34 @@ public class Maze {
             this.goal = goalPositionOptions.get(rnd.nextInt(goalPositionOptions.size()));
         } while (this.getStartPosition().equals(this.getGoalPosition()));
     }
+
+    public byte[] toByteArray() {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+
+        // dimensions of the maze - rows and columns
+        byteStream.write(getMazeRows());
+        byteStream.write(getMazeCols());
+
+        // maze data 
+        for (int i = 0; i < getMazeRows(); i++) {
+            for (int j = 0; j < getMazeCols(); j++) {
+                byteStream.write(maze[i][j]);
+            }
+        }
+
+        // start position 
+        byteStream.write(start.getRowIndex());
+        byteStream.write(start.getColumnIndex());
+
+        // goal position 
+        byteStream.write(goal.getRowIndex());
+        byteStream.write(goal.getColumnIndex());
+
+        return byteStream.toByteArray();
+
+    }
 }
+
+    
+    
+        
