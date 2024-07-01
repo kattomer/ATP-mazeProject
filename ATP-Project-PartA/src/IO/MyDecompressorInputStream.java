@@ -1,5 +1,7 @@
+package IO;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.InflaterInputStream;
 
 public class MyDecompressorInputStream extends InputStream {
 
@@ -16,22 +18,18 @@ public class MyDecompressorInputStream extends InputStream {
 
     @Override
     public int read(byte[] b) throws IOException {
-        this.in.read(decompress(b));    
-    }
-
-    @Override
-    public byte[] decompress(byte[] compressedBytes) throws IOException {
-        ByteArrayOutputStream decompressedStream = new ByteArrayOutputStream();
-
-        for (int i = 0; i < compressedBytes.length; i += 2) {
-            byte currentByte = compressedBytes[i];
-            int count = compressedBytes[i + 1];
-
-            for (int j = 0; j < count; j++) {
-                decompressedStream.write(currentByte);
+        // Use an InflaterInputStream to decompress the data
+        try (InflaterInputStream inflaterInputStream = new InflaterInputStream(this.in)) {
+            int idx = 0;
+            while (inflaterInputStream.available() != 0)    // Read bytes until no more are available
+            {
+                // Read a byte from the InflaterInputStream and store it in the buffer
+                b[idx] = (byte) (inflaterInputStream.read());
+                idx++;
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        return decompressedStream.toByteArray();
+        return 0;
     }
 }

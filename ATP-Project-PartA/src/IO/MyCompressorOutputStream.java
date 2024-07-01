@@ -1,5 +1,9 @@
+package IO;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 
 public class MyCompressorOutputStream extends OutputStream {
@@ -16,30 +20,25 @@ public class MyCompressorOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte[] b) throws IOException {
+    public void write(byte[] b) throws IOException{
         this.out.write(compress(b));
     }
 
-    public byte[] compress(byte[] bytes) {
-        ByteArrayOutputStream compressedStream = new ByteArrayOutputStream();
-
-        byte currentByte = bytes[0];
-        int count = 1;
-
-        for (int i = 1; i < bytes.length; i++) {
-            if (bytes[i] == currentByte && count < 255) {
-                count++;
-            } else {
-                compressedStream.write(currentByte);
-                compressedStream.write(count);
-                currentByte = bytes[i];
-                count = 1;
-            }
+    public byte[] compress(byte[] bytes){
+        // Create a Deflater with the best compression level
+        Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+        // Use a ByteArrayOutputStream to hold the compressed data in memory
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(byteArrayOutputStream, deflater)) {
+            // Write the input bytes to the DeflaterOutputStream
+            deflaterOutputStream.write(bytes);
+            deflaterOutputStream.finish();
+            return byteArrayOutputStream.toByteArray();
         }
-
-        // Write the remaining byte and count
-        compressedStream.write(currentByte);
-        compressedStream.write(count);
-
-        return compressedStream.toByteArray();
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return new byte[0]; // In case of an error, return an empty byte array
+        }
     }
+}
