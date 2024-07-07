@@ -14,6 +14,10 @@ public class MyCompressorOutputStream extends OutputStream {
         this.out = out;
     }
 
+    public OutputStream getOut() {
+        return out;
+    }
+
     @Override
     public void write(int b) throws IOException {
         this.out.write(b);
